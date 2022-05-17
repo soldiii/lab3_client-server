@@ -36,7 +36,7 @@ WHERE
     return $stmt;
     
     }
-
+    
     function FullInfoAboutOrder ($orderId) {
 
         $query = 'SELECT

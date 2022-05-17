@@ -14,7 +14,7 @@ function route($method, $urlData, $formData) {
     if ($method === 'GET') {
         // Получаем id товара
         $customerId = $_GET['Cust_id'];
-        $orderId = $_GET['Ord_id'];
+        $orderId = $_GET['id'];
         
         $format = $_GET['format'];
         if($format != 'xml' && $format != 'json' && $format != ''){
@@ -59,8 +59,11 @@ function route($method, $urlData, $formData) {
             }
                 http_response_code (200) ;
                 include_once 'config/XmlEncoder.php';
-                if($format == 'xml')
-                xml_encode($orders_arr);
+                if($format == 'xml'){
+                    $xml = new SimpleXMLElement('<result/>');
+                    to_xml($xml,$orders_arr);
+                    echo($xml->asXML());
+                    }
                 else
                 if($format == 'json' || $format == '')
                 echo json_encode($orders_arr);

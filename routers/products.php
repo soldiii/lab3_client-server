@@ -26,11 +26,11 @@ function route($method, $urlData, $formData) {
             echo('Недопустимый параметр для format');
             return;
         }
-        if($begin == '' && $end == '')
+        if(count($urlData) === 1 && $urlData[0] == 'price_list')
         $stmt=$product->PriceList();
-        else{
+        else if (count($urlData) === 1 && $urlData[0] === 'statistics'){
             $flag =1;
-        $stmt=$product->Statistics($begin,$end);
+            $stmt=$product->Statistics($begin,$end);
         }
         $num = $stmt->rowCount();
         if ($num>0) {
@@ -53,8 +53,11 @@ function route($method, $urlData, $formData) {
             }
                 http_response_code (200) ;
                 include_once 'config/XmlEncoder.php';
-                if($format == 'xml')
-                xml_encode($products_arr);
+                if($format == 'xml'){
+                    $xml = new SimpleXMLElement('<result/>');
+                    to_xml($xml,$products_arr);
+                    echo($xml->asXML());
+                    }
                 else
                 if($format == 'json' || $format == '')
                 echo json_encode($products_arr);

@@ -27,10 +27,8 @@ FROM
 WHERE
     ID_Customer LIKE :id'; 
     
-    // nomrororKa sanpoca
     $stmt = $this->conn->prepare($query);
     $stmt->bindValue(':id', $customerId);
-    // wunomisem sampoc
     $stmt->execute();
     
     return $stmt;
@@ -46,15 +44,14 @@ WHERE
         WHERE
             ID_Customer LIKE :id';  
         
-        // nomrororKa sanpoca
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id', $customerId);
-        // wunomisem sampoc
         $stmt->execute();
         
         return $stmt;    
     }
 
+    
         function POSTCustomer($data){
             $id = $data['ID_Customer'];
             $Cname = $data['CompanyName'];
