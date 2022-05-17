@@ -13,37 +13,25 @@ function route($method, $urlData, $formData) {
     // Получение информации о покупателе
     if ($method === 'GET') {
         // Получаем id товара
-        $customerId = $_GET['Cust_id'];
-        $orderId = $_GET['id'];
+        
+        if(count($urlData) === 1){
+            $orderId = $urlData[0];
+            $stmt = $order->FullInfoAboutOrder($orderId);
+        }
         
         $format = $_GET['format'];
         if($format != 'xml' && $format != 'json' && $format != ''){
             echo('Недопустимый параметр для format');
             return;
         }
-        if($customerId == "" && $orderId == ""){
-            echo "Введите идентификатор заказа или покупателя";
-            return;
-        }
-        if($orderId != '')
-        $stmt = $order ->FullInfoAboutOrder($orderId);
-        else
-        $stmt = $order ->ListOfOrders($customerId);
+
+
         $num = $stmt->rowCount();
         if ($num>0) {
             $orders_arr=array();
             $orders_arr["records"]=array();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 extract ($row);
-                if($orderId== '')
-                $order_item=array(
-                    "ID_Customer"=>$ID_Customer,
-                    "ID_Order"=>$ID_Order,
-                    "OrderDate" =>$OrderDate,
-                    "DeliveryDate"=>$DeliveryDate
-
-                );
-                else
                  $order_item=array(
                         "ID_Order"=>$ID_Order,
                         "ID_Customer"=>$ID_Customer,

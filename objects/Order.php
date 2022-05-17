@@ -18,25 +18,6 @@ public function __construct($db) {
 	$this->conn = $db;
 }
 
-function ListOfOrders ($customerId) {
-
-    $query = 'SELECT
-    ID_Customer, ID_Order, OrderDate, DeliveryDate
-FROM
-     orders 
-WHERE
-    ID_Customer LIKE :id'; 
-    
-    // nomrororKa sanpoca
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindValue(':id', $customerId);
-    // wunomisem sampoc
-    $stmt->execute();
-    
-    return $stmt;
-    
-    }
-    
     function FullInfoAboutOrder ($orderId) {
 
         $query = 'SELECT

@@ -51,6 +51,22 @@ WHERE
         return $stmt;    
     }
 
+    function ListOfOrders($customerId){
+
+        $query = 'SELECT
+    ID_Customer, ID_Order, OrderDate, DeliveryDate
+FROM
+     orders 
+WHERE
+    ID_Customer LIKE :id'; 
+    
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindValue(':id', $customerId);
+    $stmt->execute();
+    
+    return $stmt;
+    }
+
     
         function POSTCustomer($data){
             $id = $data['ID_Customer'];

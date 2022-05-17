@@ -13,20 +13,20 @@ function route($method, $urlData, $formData) {
     // Получение информации о покупателе
     if ($method === 'GET') {
         // Получаем id товара
-        $customerId = $_GET['id'];
 
-        if($customerId == ""){
-            echo "Введите идентификатор покупателя";
-            return;
-        }
-
-        if(count($urlData) === 1 && $urlData[0] === 'general_info'){
-            $flag = 1;
+        if(count($urlData) === 2 && $urlData[0] === 'general_info'){
+            $customerId = $urlData[1];
             $stmt = $customer->GeneralInformation($customerId);
         }
-        else{
-            $flag=0;
+
+        if(count($urlData) === 1){
+            $customerId = $urlData[0];
             $stmt = $customer->FullInformation($customerId);
+        }
+
+        if(count($urlData) === 2 && $urlData[1] === 'orders'){
+            $customerId = $urlData[0];
+            $stmt =$customer ->ListOfOrders($customerId);
         }
 
        
@@ -41,7 +41,7 @@ function route($method, $urlData, $formData) {
             $customers_arr=array();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 extract ($row);
-                if($flag == 0)
+                if(count($urlData) === 1)
                  $customer_item=array(
                         "ID_Customer"=>$ID_Customer,
                         "CompanyName"=>$CompanyName,
@@ -53,11 +53,19 @@ function route($method, $urlData, $formData) {
                         "City"=>$City,
                         "Country"=>$Country
                     );
-                else if ($flag == 1)
+                else if (count($urlData) === 2 && $urlData[0] === 'general_info')
                     $customer_item=array(
                         "ID_Customer"=>$ID_Customer,
                         "CompanyName"=>$CompanyName,
-                        "Phone"=>$Phone,
+                        "Phone"=>$Phone
+                    );
+                    else if (count($urlData) === 2 && $urlData[1] === 'orders')
+                    $customer_item=array(
+                        "ID_Customer"=>$ID_Customer,
+                        "ID_Order"=>$ID_Order,
+                        "OrderDate"=>$OrderDate,
+                        "DeliveryDate"=>$DeliveryDate
+
                     );
                     array_push ($customers_arr, $customer_item);
                 }
